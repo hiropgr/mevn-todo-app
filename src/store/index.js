@@ -93,14 +93,13 @@ export default new Vuex.Store({
     updateTaskList(state, {taskList, set}) {
       taskList.name = set.name
     },
-    deleteTaskList(state, taskList) {
-      const index = state.taskLists.findIndex(tl => tl._id == taskList._id)
+    deleteTaskList(state, taskListId) {
+      const index = state.taskLists.findIndex(tl => tl._id == taskListId)
       if(index >= 0)
         state.taskLists.splice(index, 1)
     },
-    setDefaultTaskList(state, taskList) {
-      console.log(state.user);
-      state.user.config.defaultTaskListId = taskList._id
+    setDefaultTaskList(state, taskListId) {
+      state.user.config.defaultTaskListId = taskListId
     }
   },
   actions: {
@@ -113,11 +112,11 @@ export default new Vuex.Store({
     updateTaskList({commit}, {taskList, set}) {
       commit('updateTaskList', {taskList, set})
     },
-    deleteTaskList({commit}, taskList) {
-      commit('deleteTaskList', taskList)
+    deleteTaskList({commit}, taskListId) {
+      commit('deleteTaskList', taskListId)
     },
-    setDefaultTaskList({commit}, taskList) {
-      commit('setDefaultTaskList', taskList)
+    setDefaultTaskList({commit}, taskListId) {
+      commit('setDefaultTaskList', taskListId)
     }
   },
   modules: {
