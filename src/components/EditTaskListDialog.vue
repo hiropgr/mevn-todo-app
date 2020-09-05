@@ -5,48 +5,50 @@
         transition="dialog-transition"
     >
         <v-card v-if="taskList">
-            <template v-if="!defaultListPicker">
-                <v-card-title>
-                    <h3>Edit task list</h3>
-                </v-card-title>
-                <v-card-text>
-                    <v-text-field
-                        v-model="name"
-                        :rules="[v => !!v || `List name can't be empty`]"
-                        label="List name"
-                    ></v-text-field>
-                    <v-row>
+            <v-slide-x-transition hide-on-leave>
+                <div v-if="!defaultListPicker">
+                    <v-card-title>
+                        <h3>Edit task list</h3>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-text-field
+                            v-model="name"
+                            :rules="[v => !!v || `List name can't be empty`]"
+                            label="List name"
+                        ></v-text-field>
+                        <v-row>
+                            <v-spacer></v-spacer>
+                            <v-btn color="yellow darken-2" class="font-weight-bold" text @click="setDefaultTaskList(taskList)">
+                                <v-icon left>mdi-star-circle</v-icon>
+                                Set as default
+                            </v-btn>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn text color="error" @click="deleteTaskList">Delete</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="yellow darken-2" class="font-weight-bold" text @click="setDefaultTaskList(taskList)">
-                            <v-icon left>mdi-star-circle</v-icon>
-                            Set as default
-                        </v-btn>
-                    </v-row>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn text color="error" @click="deleteTaskList">Delete</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" text class="font-weight-bold" :disabled="name == ''" @click="saveTaskList">Save</v-btn>
-                </v-card-actions>
-            </template>
+                        <v-btn color="primary" text class="font-weight-bold" :disabled="name == ''" @click="saveTaskList">Save</v-btn>
+                    </v-card-actions>
+                </div>
 
-            <template v-else>
-                <v-card-title>
-                    <h3>Default list will be deleted, select a new one</h3>
-                </v-card-title>
-                <v-card-text>
-                    <v-select
-                        v-model="newDefaultListId"
-                        :items="selectItems"
-                        label="Choose new default task list"
-                    ></v-select>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn text color="secondary" @click="defaultListPicker = false">Cancel</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="error" class="font-weight-bold" text :disabled="!newDefaultListId" @click="deleteDefaultTaskList">Delete</v-btn>
-                </v-card-actions>
-            </template>
+                <div v-else :key="2">
+                    <v-card-title>
+                        <h3>Default list will be deleted, select a new one</h3>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-select
+                            v-model="newDefaultListId"
+                            :items="selectItems"
+                            label="Choose new default task list"
+                        ></v-select>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn text color="secondary" @click="defaultListPicker = false">Cancel</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn color="error" class="font-weight-bold" text :disabled="!newDefaultListId" @click="deleteDefaultTaskList">Delete</v-btn>
+                    </v-card-actions>
+                </div>
+            </v-slide-x-transition>
         </v-card>
     </v-dialog>
 </template>
