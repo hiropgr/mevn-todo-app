@@ -18,11 +18,12 @@
         </v-card-title>
         <v-card-text>
                 <v-list two-line rounded class="overflow-y-auto" style="height: 63vh" :key="taskList.name">
-                <v-slide-y-transition hide-on-leave leave-absolute group>
+                <v-slide-y-transition leave-absolute group>
                     <v-list-item
-                        v-for="(item, index) in taskList.items"
-                        :key="index"
-                        @click="true"
+                        v-for="item in sortedTasks"
+                        :key="item._id"
+                        @click="setActiveTask(item)"
+                        :class="{ 'teal lighten-5': activeTask && item._id == activeTask._id }"
                     >
                         <v-simple-checkbox
                             @click.stop="toggleTaskStatus(item)"
@@ -35,14 +36,25 @@
                         ></v-simple-checkbox>
 
                         <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
-                            <v-list-item-subtitle v-text="item.list.name"></v-list-item-subtitle>
+                            <v-list-item-title 
+                                :class="{'grey--text': item.completed}"
+                            >
+                                <span :style="{'text-decoration': item.completed ? 'line-through' : 'none'}">
+                                    {{ item.text }}
+                                </span>
+                            </v-list-item-title>
+                            <v-list-item-subtitle>
+                                {{ item.list.name }}
+                                <v-icon small :color="$priorityColors[item.priority]">mdi-fire</v-icon>
+                            </v-list-item-subtitle>
                         </v-list-item-content>
 
                         <v-list-item-action>
-                            <v-btn icon>
-                                <v-icon color="error lighten-1">mdi-close</v-icon>
-                            </v-btn>
+                            <v-slide-x-reverse-transition>
+                                <v-btn v-if="item.completed" icon @click.stop="deleteTask(item)">
+                                    <v-icon color="grey">mdi-close</v-icon>
+                                </v-btn>
+                            </v-slide-x-reverse-transition>
                         </v-list-item-action>
                     </v-list-item>
                 </v-slide-y-transition>
@@ -52,7 +64,7 @@
                 <v-col cols="11">
                     <v-text-field
                         v-model="taskText"
-                        @keypress.enter.prevent="addTask"
+                        @keypress.enter.prevent="addTaskQuickly"
                         @focus="textfieldFocused = true"
                         @blur="textfieldFocused = false"
                         :label="`Click to quickly add a task to the ${addressList} list`"
@@ -67,7 +79,7 @@
                         justify-self="center" 
                         icon large 
                         class="mt-1" 
-                        @click.prevent="addTask"
+                        @click.prevent="addTaskQuickly"
                     >
                         <v-icon>mdi-arrow-up</v-icon>
                     </v-btn>
@@ -82,7 +94,7 @@ export default {
     data () {
         return {
             taskText: '',
-            textfieldFocused: false
+            textfieldFocused: false,
         }
     },
     computed: {
@@ -91,6 +103,19 @@ export default {
         },
         taskList() {
             return this.$store.state.activeList || this.allTasks
+        },
+        activeTask() {
+            return this.$store.state.activeTask
+        },
+        sortedTasks() { 
+            let tasks = [...this.taskList.items].sort((a, b) => {
+                return b.priority - a.priority
+            })
+            tasks.sort((a, b) => {
+                return a.completed - b.completed
+            })
+            
+            return tasks
         },
         addressList() {
             return this.$store.state.activeList ? `"${this.taskList.name}"` : 'default task'
@@ -105,14 +130,20 @@ export default {
         }
     },
     methods: {
-        addTask() {
+        addTaskQuickly() {
             if(this.taskText == '')
                 return
-            this.$store.dispatch('addTask', this.taskText)
+            this.$store.dispatch('addTaskQuickly', this.taskText)
             this.taskText = ''
         },
         toggleTaskStatus(task) {
             this.$store.dispatch('toggleTaskStatus', task)
+        },
+        setActiveTask(task) {
+            this.$store.commit('setActiveTask', task)
+        },
+        deleteTask(task) {
+            this.$store.dispatch('deleteTask', task)
         }
     }
 }

@@ -4,7 +4,7 @@
     <app-nav-drawer></app-nav-drawer>
     
     <v-main class="background">
-      <v-container fluid>
+      <v-container fluid class="overflow-x-auto">
         
         <v-row class="pa-3 pb-16">
           <v-spacer></v-spacer>

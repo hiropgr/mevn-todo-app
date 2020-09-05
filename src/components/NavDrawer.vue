@@ -23,6 +23,10 @@
         
         <v-divider></v-divider>
 
+        <v-btn color="teal" tile text block class="mt-3" @click="addTaskDialog = true">
+            <h3>Add task</h3>
+        </v-btn>
+
         <v-list-item
             link
             class="mt-3"
@@ -107,18 +111,21 @@
 
         <app-edit-task-list-dialog v-model="editDialog" :taskList="editingTaskList"></app-edit-task-list-dialog>
         <app-create-task-list-dialog v-model="createDialog"></app-create-task-list-dialog>
+        <app-add-task-dialog v-model="addTaskDialog"></app-add-task-dialog>
     </v-navigation-drawer>
 </template>
 
 <script>
 import AppEditTaskListDialog from './EditTaskListDialog'
 import AppCreateTaskListDialog from './CreateTaskListDialog'
+import AppAddTaskDialog from './AddTaskDialog'
 
 export default {
     data() {
         return {
             drawer: true,
             editingTaskList: null,
+            addTaskDialog: false,
             editDialog: false,
             createDialog: false
         }
@@ -147,7 +154,7 @@ export default {
         }
     },
     components: {
-        AppEditTaskListDialog, AppCreateTaskListDialog
+        AppEditTaskListDialog, AppCreateTaskListDialog, AppAddTaskDialog
     }
 }
 </script>

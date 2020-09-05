@@ -5,6 +5,12 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
+Vue.prototype.$priorityColors = {
+  0: 'info lighten-2',
+  1: 'yellow darken-2',
+  2: 'yellow darken-4'
+}
+
 new Vue({
   store,
   vuetify,
