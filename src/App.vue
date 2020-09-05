@@ -1,28 +1,53 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app class="nunito">
+    
+    <app-nav-drawer></app-nav-drawer>
+    
+    <v-main class="background">
+      <v-container fluid>
+        
+        <v-row class="pa-3 pb-16">
+          <v-spacer></v-spacer>
+          <v-btn icon color="black" large class="white">
+            <v-icon large>mdi-cog-outline</v-icon>
+          </v-btn>
+        </v-row>
+
+        <app-desktop></app-desktop>
+
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AppNavDrawer from './components/NavDrawer'
+import AppDesktop from './components/Desktop'
 
 export default {
+  created () {
+    this.$store.commit('setTaskList')
+  },
   name: 'App',
   components: {
-    HelloWorld
+    AppNavDrawer,
+    AppDesktop
+  },
+  data() {
+    return {
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="sass">
+  html
+    overflow-y: auto !important
+
+  .nunito
+    font-family: Nunito, sans-serif !important
+
+  .background
+    background: url(../public/images/background.jpg)
+    background-size: cover
 </style>
