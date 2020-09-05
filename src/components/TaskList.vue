@@ -102,10 +102,10 @@ export default {
             return this.$store.getters.allTasks
         },
         taskList() {
-            return this.$store.state.activeList || this.allTasks
+            return this.$store.state.tasks.activeList || this.allTasks
         },
         activeTask() {
-            return this.$store.state.activeTask
+            return this.$store.state.tasks.activeTask
         },
         sortedTasks() { 
             let tasks = [...this.taskList.items].sort((a, b) => {
@@ -118,7 +118,7 @@ export default {
             return tasks
         },
         addressList() {
-            return this.$store.state.activeList ? `"${this.taskList.name}"` : 'default task'
+            return this.$store.state.tasks.activeList ? `"${this.taskList.name}"` : 'default task'
         },
         countCompletedTask() {
             return this.taskList.items.reduce((total, task) => {

@@ -58,7 +58,7 @@ export default {
             }
         },
         taskLists() {
-            return this.$store.state.taskLists
+            return this.$store.state.tasks.taskLists
         },
         selectItems() {
             let lists = []

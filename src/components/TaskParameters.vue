@@ -62,7 +62,7 @@ export default {
     },
     computed: {
         task() {
-            return this.$store.state.activeTask
+            return this.$store.state.tasks.activeTask
         },
         text: {
             get() {

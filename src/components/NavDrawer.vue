@@ -135,13 +135,13 @@ export default {
             return this.$store.state.user
         },
         taskLists() {
-            return this.$store.state.taskLists
+            return this.$store.state.tasks.taskLists
         },
         allTasks() {
             return this.$store.getters.allTasks
         },
         activeList() {
-            return this.$store.state.activeList || this.allTasks
+            return this.$store.state.tasks.activeList || this.allTasks
         }
     },
     methods: {

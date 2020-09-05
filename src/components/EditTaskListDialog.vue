@@ -73,7 +73,7 @@ export default {
             }
         },
         allLists() {
-            return this.$store.state.taskLists
+            return this.$store.state.tasks.taskLists
         },
         userDefaultTaskListId() {
             return this.$store.state.user.config.defaultTaskListId
