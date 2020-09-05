@@ -10,6 +10,14 @@ function createTask(text) {
     }
 }
 
+function createTaskList(name) {
+  return {
+    _id: name,
+    name,
+    items: []
+  }
+}
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -90,6 +98,9 @@ export default new Vuex.Store({
     toggleTaskStatus(state, task) {
       task.completed = !task.completed
     },
+    createTaskList(state, taskListName) {
+      state.taskLists.push(createTaskList(taskListName))
+    },
     updateTaskList(state, {taskList, set}) {
       taskList.name = set.name
     },
@@ -108,6 +119,9 @@ export default new Vuex.Store({
     },
     toggleTaskStatus({commit}, task) {
       commit('toggleTaskStatus', task)
+    },
+    createTaskList({commit}, taskListName) {
+      commit('createTaskList', taskListName)
     },
     updateTaskList({commit}, {taskList, set}) {
       commit('updateTaskList', {taskList, set})
