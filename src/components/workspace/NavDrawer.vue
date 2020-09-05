@@ -116,9 +116,9 @@
 </template>
 
 <script>
-import AppEditTaskListDialog from './EditTaskListDialog'
-import AppCreateTaskListDialog from './CreateTaskListDialog'
-import AppAddTaskDialog from './AddTaskDialog'
+import AppEditTaskListDialog from './dialogs/EditTaskList'
+import AppCreateTaskListDialog from './dialogs/CreateTaskList'
+import AppAddTaskDialog from './dialogs/AddTask'
 
 export default {
     data() {

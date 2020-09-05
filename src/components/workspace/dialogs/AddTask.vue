@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import AppPriorityPicker from './PriorityPicker'
+import AppPriorityPicker from '../PriorityPicker'
 
 export default {
     props: ['value'],
