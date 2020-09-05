@@ -60,7 +60,7 @@
                     <v-list-item-action>
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                                <v-btn icon color="grey" v-on="on" @click.stop="true">
+                                <v-btn icon color="grey" v-on="on" @click.stop="createDialog = true">
                                     <v-icon>mdi-plus</v-icon>
                                 </v-btn>
                             </template>
@@ -69,53 +69,58 @@
                     </v-list-item-action>
                 </template>
 
-                <v-list-item
-                    v-for="(taskList, index) in taskLists"
-                    :key="index"
-                    link
-                    @click="setTaskList(taskList)"
-                    class="pl-10"
-                    :class="[taskList == activeList ? 'grey lighten-4' : 'white' ]"
-                >
-                    <v-list-item-title>
-                        {{taskList.name}}
-                        <v-chip class="pa-2 ml-1" small>
-                            <strong>{{ taskList.items.length }}</strong>
-                        </v-chip>
-                        <v-tooltip bottom :key="user.config.defaultTaskListId == taskList._id">
-                            <template v-slot:activator="{ on }">
-                                <v-icon 
-                                    v-if="user.config.defaultTaskListId == taskList._id"
-                                    v-on="on"
-                                    color="yellow darken-2" 
-                                    class="mx-3"
-                                >mdi-star-circle</v-icon>
-                            </template>
-                            <span>Default task list</span>
-                        </v-tooltip>
-                    </v-list-item-title>
-                    <v-list-item-action>
-                        <v-btn icon color="grey" @click.stop="editTaskList(taskList)">
-                            <v-icon>settings</v-icon>
-                        </v-btn>
-                    </v-list-item-action>
-                </v-list-item>
+                <v-slide-y-transition group>
+                    <v-list-item
+                        v-for="(taskList, index) in taskLists"
+                        :key="index"
+                        link
+                        @click="setTaskList(taskList)"
+                        class="pl-10"
+                        :class="[taskList == activeList ? 'grey lighten-4' : 'white' ]"
+                    >
+                        <v-list-item-title>
+                            {{taskList.name}}
+                            <v-chip class="pa-2 ml-1" small>
+                                <strong>{{ taskList.items.length }}</strong>
+                            </v-chip>
+                            <v-tooltip bottom :key="user.config.defaultTaskListId == taskList._id">
+                                <template v-slot:activator="{ on }">
+                                    <v-icon 
+                                        v-if="user.config.defaultTaskListId == taskList._id"
+                                        v-on="on"
+                                        color="yellow darken-2" 
+                                        class="mx-3"
+                                    >mdi-star-circle</v-icon>
+                                </template>
+                                <span>Default task list</span>
+                            </v-tooltip>
+                        </v-list-item-title>
+                        <v-list-item-action>
+                            <v-btn icon color="grey" @click.stop="editTaskList(taskList)">
+                                <v-icon>settings</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-slide-y-transition>
             </v-list-group>
         </v-list>
 
-        <app-edit-task-list-dialog v-model="dialog" :taskList="editingTaskList"></app-edit-task-list-dialog>
+        <app-edit-task-list-dialog v-model="editDialog" :taskList="editingTaskList"></app-edit-task-list-dialog>
+        <app-create-task-list-dialog v-model="createDialog"></app-create-task-list-dialog>
     </v-navigation-drawer>
 </template>
 
 <script>
 import AppEditTaskListDialog from './EditTaskListDialog'
+import AppCreateTaskListDialog from './CreateTaskListDialog'
 
 export default {
     data() {
         return {
             drawer: true,
             editingTaskList: null,
-            dialog: false
+            editDialog: false,
+            createDialog: false
         }
     },
     computed: {
@@ -138,11 +143,11 @@ export default {
         },
         editTaskList(taskList) {
             this.editingTaskList = taskList
-            this.dialog = true
+            this.editDialog = true
         }
     },
     components: {
-        AppEditTaskListDialog
+        AppEditTaskListDialog, AppCreateTaskListDialog
     }
 }
 </script>
