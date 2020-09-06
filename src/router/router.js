@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import authGuard from './authGruard'
 
 import Workspace from '../components/workspace/Container'
+import Reg from '../components/auth/Reg'
+import Login from '../components/auth/Login'
 
 Vue.use(Router)
 
@@ -16,16 +18,14 @@ export default new Router({
       beforeEnter: authGuard
     },
     {
-      path: '/registration',
+      path: '/signup',
       name: 'reg',
-      component: Workspace,
-      beforeEnter: authGuard
+      component: Reg,
     },
     {
-      path: '/login',
+      path: '/signin',
       name: 'login',
-      component: Workspace,
-      beforeEnter: authGuard
+      component: Login,
     },
     {
       path: '*',
