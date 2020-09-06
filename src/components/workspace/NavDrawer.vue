@@ -1,32 +1,39 @@
 <template>
     <v-navigation-drawer
+        v-model="drawer"
         app
-        permanent
         class="white"
+        :permanent="brPointName != 'sm' && brPointName != 'xs'"
+        :mini-variant="!drawer"
+        absolute
     >
-        <h1 class="font-weight-bold text-center pa-3">
+        <h1 v-if="drawer" class="font-weight-bold text-center pa-3">
             <strong><span>TODO</span>s</strong>
         </h1>
 
         <v-divider></v-divider>
 
         <v-list-item two-line>
-                <v-list-item-avatar>
-                    <v-icon large>mdi-check</v-icon>
-                </v-list-item-avatar>
+            <v-list-item-avatar v-if="drawer">
+                <v-icon large>mdi-check</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-icon v-else>
+                <v-icon>mdi-check</v-icon>
+            </v-list-item-icon>
 
-                <v-list-item-content>
-                    <v-list-item-title>{{ user.name }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                        {{ user.email }}
-                    </v-list-item-subtitle>
-                </v-list-item-content>
+            <v-list-item-content>
+                <v-list-item-title>{{ user.name }}</v-list-item-title>
+                <v-list-item-subtitle>
+                    {{ user.email }}
+                </v-list-item-subtitle>
+            </v-list-item-content>
         </v-list-item>
         
         <v-divider></v-divider>
 
-        <v-btn color="teal" tile text block class="mt-3" @click="addTaskDialog = true">
-            <h3>Add task</h3>
+        <v-btn color="teal" :icon="!drawer" tile text block class="mt-3" @click="addTaskDialog = true">
+            <h3 v-if="drawer">Add task</h3>
+            <v-icon v-else>mdi-plus</v-icon>
         </v-btn>
 
         <v-list-item
@@ -81,9 +88,8 @@
                         :key="index"
                         link
                         @click="setTaskList(taskList)"
-                        class="pl-10"
                         :class="[taskList == activeList ? 'grey lighten-4' : 'white' ]"
-                    >
+                    >   
                         <v-list-item-title>
                             {{taskList.name}}
                             <v-chip class="pa-2 ml-1" small>
@@ -123,9 +129,9 @@ import AppCreateTaskListDialog from './dialogs/CreateTaskList'
 import AppAddTaskDialog from './dialogs/AddTask'
 
 export default {
+    props: ['value'],
     data() {
         return {
-            drawer: true,
             editingTaskList: null,
             addTaskDialog: false,
             editDialog: false,
@@ -144,6 +150,17 @@ export default {
         },
         activeList() {
             return this.$store.state.tasks.activeList || this.allTasks
+        },
+        brPointName() {
+            return this.$vuetify.breakpoint.name
+        },
+        drawer: {
+            get() {
+                return this.value
+            },
+            set(value) {
+                this.$emit('input', value)
+            }
         }
     },
     methods: {

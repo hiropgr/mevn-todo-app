@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card width="100%">
         <v-card-title>
             <v-fade-transition hide-on-leave>
                 <h2 :key="taskList.name">{{ taskList.name }}</h2>
@@ -16,8 +16,9 @@
                 class="mr-2"
             ></v-progress-circular>
         </v-card-title>
+
         <v-card-text>
-                <v-list two-line rounded class="overflow-y-auto" style="height: 63vh" :key="taskList.name">
+            <v-list class="overflow-y-auto" two-line rounded :key="taskList.name" style="height: 60vh">
                 <v-slide-y-transition leave-absolute group>
                     <v-list-item
                         v-for="item in sortedTasks"
@@ -59,7 +60,9 @@
                     </v-list-item>
                 </v-slide-y-transition>
             </v-list>
-            
+        </v-card-text>
+
+        <v-card-actions>
             <v-row class="px-3" align="center" no-gutters>
                 <v-col cols="11">
                     <v-text-field
@@ -85,7 +88,7 @@
                     </v-btn>
                 </v-col>
             </v-row>
-        </v-card-text>
+        </v-card-actions>
     </v-card>
 </template>
 

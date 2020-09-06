@@ -17,13 +17,19 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    
+    defaultTaskListId(state) {
+      return state.user.config.defaultTaskListId
+    }
   },
   mutations: {
-    
+    setDefaultTaskList(state, taskListId) {
+      state.user.config.defaultTaskListId = taskListId
+    }
   },
   actions: {
-    
+    setDefaultTaskList({commit}, taskListId) {
+      commit('setDefaultTaskList', taskListId)
+    }
   },
   modules: {
     tasks,

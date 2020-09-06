@@ -73,16 +73,6 @@ export default {
       state.activeList = taskList
       state.activeTask = null
     },
-    addTaskQuickly(state, text) {
-      const task = createTask(text)
-      if(state.activeList) {
-        state.activeList.items.push(task)
-      }
-      else {
-        const list = state.taskLists.find(tl => tl._id == state.user.config.defaultTaskListId)
-        list.items.push(task)
-      }
-    },
     addTask(state, { text, priority, taskListId }) {
       const task = createTask(text, priority)
       const list = state.taskLists.find(tl => tl._id == taskListId)
@@ -121,18 +111,17 @@ export default {
       if(index >= 0)
         state.taskLists.splice(index, 1)
     },
-    setDefaultTaskList(state, taskListId) {
-      state.user.config.defaultTaskListId = taskListId
-    },
     setActiveTask(state, task) {
       state.activeTask = task
     }
   },
   actions: {
-    addTaskQuickly({state, commit}, text) {
-      let payload = state.activeList
-                  ? { text, priority: 0, taskListId: state.activeList._id }
-                  : { text, priority: 0, taskListId: state.user.config.defaultTaskListId }
+    addTaskQuickly({state, rootState, commit}, text) {
+      let payload = { 
+        text, 
+        priority: 0, 
+        taskListId: this.state.activeList ? state.activeList._id : rootState.user.config.defaultTaskListId
+      }
       commit('addTask', payload)
     },
     addTask({commit}, task) {
@@ -159,8 +148,5 @@ export default {
     deleteTaskList({commit}, taskListId) {
       commit('deleteTaskList', taskListId)
     },
-    setDefaultTaskList({commit}, taskListId) {
-      commit('setDefaultTaskList', taskListId)
-    }
   }
 }

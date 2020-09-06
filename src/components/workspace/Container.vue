@@ -1,11 +1,22 @@
 <template>
     <div>
-        <app-nav-drawer></app-nav-drawer>
+        <app-nav-drawer v-model="navDrawer"></app-nav-drawer>
         
         <v-main class="background-3">
-            <v-container fluid class="overflow-x-auto">
+            <v-container fluid style="height: 100vh" class="overflow-x-auto py-0">
                 
-                <v-row class="pa-3 pb-16">
+                <v-row class="pa-3">
+                    <v-btn 
+                        icon
+                        class="white"
+                        color="black" 
+                        @click="navDrawer = !navDrawer"
+                        large
+                    >  
+                        <v-slide-x-transition>
+                            <v-icon large>{{ navDrawer ? 'mdi-backburger' : 'mdi-menu' }}</v-icon>
+                        </v-slide-x-transition>
+                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-menu
                         transition="slide-y-transition"
@@ -54,6 +65,7 @@ export default {
             return
         }
         this.$store.commit('setTaskList')
+        this.navDrawer = this.isBigWindow
     },
     components: {
         AppNavDrawer,
@@ -61,11 +73,18 @@ export default {
     },
     data() {
         return {
+            navDrawer: true
         }
     },
     computed: {
         isUserLoggedIn() {
             return !!this.$store.state.user
+        },
+        brPointName() {
+            return this.$vuetify.breakpoint.name
+        },
+        isBigWindow() {
+            return this.brPointName != 'sm' && this.brPointName != 'xs'
         }
     }
 };
