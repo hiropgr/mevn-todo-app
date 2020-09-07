@@ -95,10 +95,10 @@
                             <v-chip class="pa-2 ml-1" small>
                                 <strong>{{ taskList.items.length }}</strong>
                             </v-chip>
-                            <v-tooltip bottom :key="user.config.defaultTaskListId == taskList._id">
+                            <v-tooltip bottom :key="defaultTaskListId == taskList._id">
                                 <template v-slot:activator="{ on }">
                                     <v-icon 
-                                        v-if="user.config.defaultTaskListId == taskList._id"
+                                        v-if="defaultTaskListId == taskList._id"
                                         v-on="on"
                                         color="yellow darken-2" 
                                         class="mx-3"
@@ -141,6 +141,9 @@ export default {
     computed: {
         user() {
             return this.$store.state.user
+        },
+        defaultTaskListId() {
+            return this.user ? this.user.config.defaultTaskListId : ''
         },
         taskLists() {
             return this.$store.state.tasks.taskLists

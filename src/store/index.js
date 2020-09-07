@@ -8,22 +8,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: {
-      name: 'Askar',
-      email: 'hiropgr@gmail.com',
-      config: {
-        defaultTaskListId: 'Hobby'
-      }
-    },
+    user: null
   },
   getters: {
     defaultTaskListId(state) {
-      return state.user.config.defaultTaskListId
+      return state.user ? state.user.config.defaultTaskListId : null
     }
   },
   mutations: {
     setDefaultTaskList(state, taskListId) {
       state.user.config.defaultTaskListId = taskListId
+    },
+    setUser(state, user) {
+      state.user = user
     }
   },
   actions: {

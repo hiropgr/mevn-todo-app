@@ -12,9 +12,28 @@ Vue.prototype.$priorityColors = {
   2: 'yellow darken-4'
 }
 
-new Vue({
-  store,
-  router,
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+let appLink = null
+async function start() {
+  if(store.state.user === null){
+
+    const stringUser = sessionStorage.getItem('user')
+    const user = stringUser ? JSON.parse(stringUser) : null
+    if(user)
+      await store.dispatch('loginUser', user)
+    if(appLink == null) {
+      createApp() 
+    }
+  }
+}
+
+function createApp() {
+  appLink = new Vue({
+    router,
+    vuetify,
+    store,
+    render: h => h(App)
+  }).$mount('#app')
+}
+
+start();
+

@@ -1,3 +1,5 @@
+import fetchPlus from '../functions/fetchPlus'
+
 function createTask(text, priority) {
   return {
       _id: text,

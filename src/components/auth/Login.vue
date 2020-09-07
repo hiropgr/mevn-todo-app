@@ -30,7 +30,6 @@
                                         label="Password"
                                         :type="passVis ? 'text' : 'password'"
                                         v-model.trim="password"
-                                        :rules="passwordRules"
                                         autocomplete="password"
                                         persistent-hint
                                         dense
@@ -66,42 +65,28 @@
 
 <script>
 export default {
-    // created () {
-    //     if(this.isUserLoggedIn) {
-    //         this.$router.push('/')
-    //         return
-    //     }
-    // },
-    // computed: {
-    //     isUserLoggedIn() {
-    //         return !!this.$store.state.user
-    //     }
-    // },
+    created () {
+        if(this.isUserLoggedIn) {
+            this.$router.push('/')
+            return
+        }
+    },
+    computed: {
+        isUserLoggedIn() {
+            return !!this.$store.state.user
+        }
+    },
     data () {
         return {
             passVis: false,
             valid: false,
             loading: false,
-            name: '',
-            nameRules: [
-                v => !!v || 'Name is required',
-            ],
             email: '',
             emailRules: [
                 v => !!v || 'Email is required',
-                v => /.+@.+/.test(v) || 'Некорретный адрес электронной почты',
+                v => /.+@.+/.test(v) || 'Incorrect email format',
             ],
-
             password:'',
-            passwordRules: [
-                v => !!v || 'Password is required',
-                v => (v && v.length >= 8) || 'Пароль должен состоять не менее чем из 8 символов'
-            ],
-            confirmPassword: '',
-            confirmPasswordRules: [
-                v => !!v || 'Confirm password',
-                v => v === this.password || 'Пароли не совпадают'
-            ],
         }
     },
     methods: {
@@ -112,12 +97,15 @@ export default {
                     const user = {
                         email: this.email,
                         password: this.password,
-                        name: this.name,
                     }
-                    await this.$store.dispatch('registerUser', user)
+                    await this.$store.dispatch('loginUser', user)
                     this.$router.push('/')
-                } 
-            } finally {
+                }
+            
+            } catch(error) {
+                console.log(error.message);
+            }
+            finally {
                 this.loading = false
             }
         },

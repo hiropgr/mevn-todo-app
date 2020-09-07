@@ -91,17 +91,17 @@
 
 <script>
 export default {
-    // created () {
-    //     if(this.isUserLoggedIn) {
-    //         this.$router.push('/')
-    //         return
-    //     }
-    // },
-    // computed: {
-    //     isUserLoggedIn() {
-    //         return !!this.$store.state.user
-    //     }
-    // },
+    created () {
+        if(this.isUserLoggedIn) {
+            this.$router.push('/')
+            return
+        }
+    },
+    computed: {
+        isUserLoggedIn() {
+            return !!this.$store.state.user
+        }
+    },
     data () {
         return {
             passVis: false,
@@ -114,18 +114,18 @@ export default {
             email: '',
             emailRules: [
                 v => !!v || 'Email is required',
-                v => /.+@.+/.test(v) || 'Некорретный адрес электронной почты',
+                v => /.+@.+/.test(v) || 'Incorrect email format',
             ],
 
             password:'',
             passwordRules: [
                 v => !!v || 'Password is required',
-                v => (v && v.length >= 8) || 'Пароль должен состоять не менее чем из 8 символов'
+                v => (v && v.length >= 8) || 'Min length of password is 8 symbols'
             ],
             confirmPassword: '',
             confirmPasswordRules: [
                 v => !!v || 'Confirm password',
-                v => v === this.password || 'Пароли не совпадают'
+                v => v === this.password || 'Passwords are not equal'
             ],
         }
     },

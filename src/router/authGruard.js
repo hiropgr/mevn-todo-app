@@ -1,8 +1,8 @@
-import store from '../store'
+// import store from '../store'
 export default function(to, from, next) {
-    if(store.state.user) {
+    // if(store.state.user || to.name == 'signin' || to.name == 'signup') {
         next()
-    } else {
-        next('/login')
-    }
+    // } else {
+    //     next('/login')
+    // }
 }
