@@ -113,7 +113,7 @@ export default {
       }
       commit('deleteTask', task)
     },
-    async updateTask({rootState}, { taskListId, updateObj }) {
+    async updateTask({commit, rootState}, { taskListId, updateObj }) {
       try {
         fetchPlus('task', 'put', JSON.stringify({ 
           task: updateObj, 
