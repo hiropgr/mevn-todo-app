@@ -13,11 +13,7 @@ export default {
   actions: {
     async registerUser({commit}, { email, password, name }) {
       try {
-        const user = await fetchPlus('http://localhost:3000/api/register', {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, name }),
-        })
+        const user = await fetchPlus('register', 'post', JSON.stringify({ email, password, name }))
         commit('setUser', user, { root: true })
         sessionStorage.setItem('user', JSON.stringify({
           email, password
@@ -29,11 +25,7 @@ export default {
     },
     async loginUser({commit}, { email, password }) {
       try {
-        const user = await fetchPlus('http://localhost:3000/api/login', {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        })
+        const user = await fetchPlus('login', 'post', JSON.stringify({ email, password }))
         commit('setUser', user, { root: true })
         sessionStorage.setItem('user', JSON.stringify({
           email, password
