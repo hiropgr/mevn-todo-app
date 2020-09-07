@@ -10,11 +10,23 @@
                 </v-slide-y-transition>
             </v-chip>
             <v-spacer></v-spacer>
-            <v-progress-circular
+            <!-- <v-progress-circular
                 :value="progress"
                 color="black"
                 class="mr-2"
-            ></v-progress-circular>
+            ></v-progress-circular> -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{on}">
+                    <v-slide-x-reverse-transition>
+                        <v-btn v-if="completedTask.length > 0" v-on="on" icon color="black" @click="deleteCompletedTasks">
+                            <v-icon>mdi-broom</v-icon>
+                        </v-btn>
+                    </v-slide-x-reverse-transition>
+                </template>
+                <span>
+                    Delete completed tasks
+                </span>
+            </v-tooltip>
         </v-card-title>
 
         <v-card-text>
@@ -125,13 +137,11 @@ export default {
         addressList() {
             return this.$store.state.tasks.activeList ? `"${this.taskList.name}"` : 'default task'
         },
-        countCompletedTask() {
-            return this.taskList.items.reduce((total, task) => {
-                return task.completed ? total + 1 : total
-            }, 0)
+        completedTask() {
+            return this.taskList.items.filter(t => t.completed)
         },
         progress() {
-            return this.countCompletedTask / this.taskList.items.length * 100
+            return this.completedTask.length / this.taskList.items.length * 100
         }
     },
     methods: {
@@ -151,6 +161,11 @@ export default {
         },
         setActiveTask(task) {
             this.$store.commit('setActiveTask', task)
+        },
+        async deleteCompletedTasks() {
+            for (const task of this.completedTask) {
+                await this.$store.dispatch('deleteTask', task)
+            }
         },
         deleteTask(task) {
             this.$store.dispatch('deleteTask', task)

@@ -100,12 +100,12 @@ export default {
     },
     async deleteTask({commit, rootState}, task) {
       try {
-        fetchPlus('task', 'delete', JSON.stringify({ 
+        commit('deleteTask', task)
+        await fetchPlus('task', 'delete', JSON.stringify({ 
           taskId: task._id, 
           taskListId: task.list._id,
           token: rootState.user.token
         }))
-        commit('deleteTask', task)
       } catch (error) {
         console.log(error);
         throw error
