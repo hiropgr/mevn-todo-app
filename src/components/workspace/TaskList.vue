@@ -81,7 +81,8 @@
                         :color="textfieldFocused ? 'primary' : 'grey'" 
                         justify-self="center" 
                         icon large 
-                        class="mt-1" 
+                        class="mt-1"
+                        :loading="addLoading"
                         @click.prevent="addTaskQuickly"
                     >
                         <v-icon>mdi-arrow-up</v-icon>
@@ -96,6 +97,7 @@
 export default {
     data () {
         return {
+            addLoading: false,
             taskText: '',
             textfieldFocused: false,
         }
@@ -133,11 +135,16 @@ export default {
         }
     },
     methods: {
-        addTaskQuickly() {
-            if(this.taskText == '')
-                return
-            this.$store.dispatch('addTaskQuickly', this.taskText)
-            this.taskText = ''
+        async addTaskQuickly() {
+            try {
+                this.addLoading = true
+                if(this.taskText == '')
+                    return
+                await this.$store.dispatch('addTaskQuickly', this.taskText)
+                this.taskText = ''   
+            } finally {
+                this.addLoading = false
+            }
         },
         toggleTaskStatus(task) {
             this.$store.dispatch('toggleTaskStatus', task)

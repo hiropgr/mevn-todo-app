@@ -27,6 +27,7 @@ export default {
       try {
         const user = await fetchPlus('login', 'post', JSON.stringify({ email, password }))
         commit('setUser', user, { root: true })
+        commit('setTaskLists', user.taskLists)
         sessionStorage.setItem('user', JSON.stringify({
           email, password
         }));

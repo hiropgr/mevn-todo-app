@@ -24,9 +24,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setDefaultTaskList({commit}, taskListId) {
-      commit('setDefaultTaskList', taskListId)
-    }
   },
   modules: {
     tasks,

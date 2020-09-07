@@ -1,60 +1,8 @@
 import fetchPlus from '../functions/fetchPlus'
 
-function createTask(text, priority) {
-  return {
-      _id: text,
-      text,
-      createdAt: Date.now(),
-      priority,
-      completed: false
-    }
-}
-
-function createTaskList(name) {
-  return {
-    _id: name,
-    name,
-    items: []
-  }
-}
-
 export default {
   state: {
-    taskLists: [
-      {
-        _id: 'Hobby',
-        name: 'Hobby',
-        items: [
-          {
-            _id: 'Finish todo application',
-            text: 'Finish todo application',
-            createdAt: Date.now(),
-            priority: 1,
-            completed: true
-          },
-          {
-            _id: 'Make a sandwich',
-            text: 'Make a sandwich',
-            createdAt: Date.now(),
-            priority: 0,
-            completed: false
-          },
-        ]
-      },
-      {
-        _id: 'Study',
-        name: 'Study',
-        items: [
-          {
-            _id: 'Do math homework',
-            text: 'Do math homework',
-            createdAt: Date.now(),
-            priority: 2,
-            completed: false
-          }
-        ]
-      }
-    ],
+    taskLists: null,
     activeList: null,
     activeTask: null
   },
@@ -71,12 +19,14 @@ export default {
       }
   },
   mutations: {
+    setTaskLists(state, taskLists) {
+      state.taskLists = taskLists
+    },
     setTaskList(state, taskList) {
       state.activeList = taskList
       state.activeTask = null
     },
-    addTask(state, { text, priority, taskListId }) {
-      const task = createTask(text, priority)
+    addTask(state, { task, taskListId }) {
       const list = state.taskLists.find(tl => tl._id == taskListId)
       list.items.push(task)
     },
@@ -102,8 +52,8 @@ export default {
     toggleTaskStatus(state, task) {
       task.completed = !task.completed
     },
-    createTaskList(state, taskListName) {
-      state.taskLists.push(createTaskList(taskListName))
+    createTaskList(state, taskList) {
+      state.taskLists.push(taskList)
     },
     updateTaskList(state, {taskList, set}) {
       taskList.name = set.name
@@ -118,37 +68,132 @@ export default {
     }
   },
   actions: {
-    addTaskQuickly({state, rootState, commit}, text) {
-      let payload = { 
-        text, 
-        priority: 0, 
-        taskListId: this.state.activeList ? state.activeList._id : rootState.user.config.defaultTaskListId
+    async addTaskQuickly({state, rootState, commit}, text) {
+      try {
+        let payload = { 
+          taskText: text, 
+          taskPriority:  0,
+          token: rootState.user.token,
+          taskListId: state.activeList ? state.activeList._id : rootState.user.config.defaultTaskListId
+        }
+        const task = await fetchPlus('task', 'post', JSON.stringify(payload))
+        task.taskListId = payload.taskListId
+        commit('addTask', { task,  taskListId: payload.taskListId })
+      } catch (error) {
+        console.log(error);
+        throw error
       }
-      commit('addTask', payload)
     },
-    addTask({commit}, task) {
-      commit('addTask', task)
+    async addTask({commit, rootState}, task) {
+      try {
+        const uploadedTask = await fetchPlus('task', 'post', JSON.stringify({ 
+          taskText: task.text, 
+          taskPriority: task.priority,
+          token: rootState.user.token,
+          taskListId: task.taskListId
+        }))
+        commit('addTask', { task: uploadedTask, taskListId: task.taskListId })
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
     },
-    deleteTask({commit}, task) {
+    async deleteTask({commit, rootState}, task) {
+      try {
+        fetchPlus('task', 'delete', JSON.stringify({ 
+          taskId: task._id, 
+          taskListId: task.list._id,
+          token: rootState.user.token
+        }))
+        commit('deleteTask', task)
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
       commit('deleteTask', task)
     },
-    updateTaskText({commit}, { task, value }) {
+    async updateTask({rootState}, { taskListId, updateObj }) {
+      try {
+        fetchPlus('task', 'put', JSON.stringify({ 
+          task: updateObj, 
+          taskListId,
+          token: rootState.user.token
+        }))
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
+    },
+    async updateTaskText({commit, dispatch}, { task, value }) {
       commit('updateTaskText', { task, value })
+      let updateObj = {...task}
+      delete updateObj.list
+      updateObj.text = value
+      await dispatch('updateTask', { taskListId: task.list._id, updateObj })
     },
-    updateTaskPriority({commit}, { task, value }) {
+    async updateTaskPriority({commit, dispatch}, { task, value }) {
       commit('updateTaskPriority', { task, value })
+      let updateObj = {...task}
+      delete updateObj.list
+      updateObj.priority = value
+      await dispatch('updateTask', { taskListId: task.list._id, updateObj })
     },
-    toggleTaskStatus({commit}, task) {
+    async toggleTaskStatus({commit, dispatch}, task) {
       commit('toggleTaskStatus', task)
+      let updateObj = {...task}
+      delete updateObj.list
+      updateObj.completed = task.completed
+      await dispatch('updateTask', { taskListId: task.list._id, updateObj })
     },
-    createTaskList({commit}, taskListName) {
-      commit('createTaskList', taskListName)
+    async createTaskList({commit, rootState}, taskListName) {
+      try {
+        const taskList = await fetchPlus('task-list', 'post', JSON.stringify({
+          token: rootState.user.token,
+          taskListName
+        }))
+        commit('createTaskList', taskList)
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
     },
-    updateTaskList({commit}, {taskList, set}) {
-      commit('updateTaskList', {taskList, set})
+    async updateTaskList({commit, rootState}, {taskList, set}) {
+      try {
+        commit('updateTaskList', {taskList, set})
+        const updateObj = {...taskList}
+        delete updateObj.items
+        await fetchPlus('task-list', 'put', JSON.stringify({
+          token: rootState.user.token,
+          taskList: updateObj
+        }))
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
     },
-    deleteTaskList({commit}, taskListId) {
-      commit('deleteTaskList', taskListId)
+    async deleteTaskList({commit, rootState}, taskListId) {
+      try {
+        commit('deleteTaskList', taskListId)
+        await fetchPlus('task-list', 'delete', JSON.stringify({
+          token: rootState.user.token,
+          taskListId
+        }))
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
     },
+    async setDefaultTaskList({commit, rootState}, taskListId) {
+      try {
+        await fetchPlus('default-task-list', 'put', JSON.stringify({
+          token: rootState.user.token,
+          taskListId
+        }))
+        commit('setDefaultTaskList', taskListId)
+      } catch (error) {
+        console.log(error);
+        throw error
+      }
+    }
   }
 }

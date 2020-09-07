@@ -18,7 +18,7 @@
             <v-card-actions>
                 <v-btn text color="secondary" @click="dialog = false">Cancel</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text class="font-weight-bold" :disabled="name == ''" @click="createTaskList">Create</v-btn>
+                <v-btn color="primary" text class="font-weight-bold" :disabled="name == ''" :loading="loading" @click="createTaskList">Create</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -30,6 +30,7 @@ export default {
     data () {
         return {
             name: '',
+            loading: false
         }
     },
     computed: {
@@ -50,9 +51,14 @@ export default {
         }
     },
     methods: {
-        createTaskList() {
-            this.$store.dispatch('createTaskList', this.name)
-            this.dialog = false
+        async createTaskList() {
+            try {
+                this.loading = true
+                await this.$store.dispatch('createTaskList', this.name)
+                this.dialog = false
+            } finally {
+                this.loading = false
+            }
         }
     }
 }

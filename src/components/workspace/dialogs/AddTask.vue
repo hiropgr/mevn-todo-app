@@ -30,7 +30,7 @@
             <v-card-actions>
                 <v-btn text color="secondary" @click="dialog = false">Cancel</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text class="font-weight-bold" :disabled="text == ''" @click="addTask">Add</v-btn>
+                <v-btn color="primary" text class="font-weight-bold" :disabled="text == ''" :loading="loading" @click="addTask">Add</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -45,7 +45,8 @@ export default {
         return {
             text: '',
             taskListId: null,
-            priority: 0
+            priority: 0,
+            loading: false
         }
     },
     computed: {
@@ -84,13 +85,18 @@ export default {
         }
     },
     methods: {
-        addTask() {
-            this.$store.dispatch('addTask', {
-                text: this.text,
-                priority: this.priority,
-                taskListId: this.taskListId
-            })
-            this.dialog = false
+        async addTask() {
+            try {
+                this.loading = true
+                await this.$store.dispatch('addTask', {
+                    text: this.text,
+                    priority: this.priority,
+                    taskListId: this.taskListId
+                })
+                this.dialog = false
+            } finally {
+                this.loading = false
+            }
         }
     },
     components: {
