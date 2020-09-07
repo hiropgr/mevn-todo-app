@@ -3,12 +3,18 @@
     <v-fade-transition hide-on-leave>
       <router-view></router-view>
     </v-fade-transition>
+    <app-notificator></app-notificator>
   </v-app>
 </template>
 
 <script>
+import AppNotificator from './components/Notificator'
+
 export default {
   name: 'App',
+  components: {
+    AppNotificator
+  }
 };
 </script>
 

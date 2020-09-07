@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import tasks from './tasks'
 import auth from './auth'
+import shared from './shared'
 
 Vue.use(Vuex)
 
@@ -27,6 +28,7 @@ export default new Vuex.Store({
   },
   modules: {
     tasks,
-    auth
+    auth,
+    shared
   }
 })

@@ -9,12 +9,13 @@ export default {
   getters: {
       allTasks(state) {
         let items = []
-        for (const taskList of state.taskLists) {
-            for (const task of taskList.items) {
-                task.list = taskList;
-                items.push(task)
-            }
-        }
+        if(state.taskLists)
+          for (const taskList of state.taskLists) {
+              for (const task of taskList.items) {
+                  task.list = taskList;
+                  items.push(task)
+              }
+          }
         return { name: 'All tasks', items };
       }
   },
@@ -80,7 +81,7 @@ export default {
         task.taskListId = payload.taskListId
         commit('addTask', { task,  taskListId: payload.taskListId })
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -94,7 +95,7 @@ export default {
         }))
         commit('addTask', { task: uploadedTask, taskListId: task.taskListId })
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -107,7 +108,7 @@ export default {
           token: rootState.user.token
         }))
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
       commit('deleteTask', task)
@@ -120,7 +121,7 @@ export default {
           token: rootState.user.token
         }))
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -153,7 +154,7 @@ export default {
         }))
         commit('createTaskList', taskList)
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -167,7 +168,7 @@ export default {
           taskList: updateObj
         }))
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -179,7 +180,7 @@ export default {
           taskListId
         }))
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     },
@@ -191,7 +192,7 @@ export default {
         }))
         commit('setDefaultTaskList', taskListId)
       } catch (error) {
-        console.log(error);
+        commit('setAlert', error.message)
         throw error
       }
     }
