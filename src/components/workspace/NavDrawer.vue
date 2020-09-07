@@ -146,7 +146,7 @@ export default {
             return this.user ? this.user.config.defaultTaskListId : ''
         },
         taskLists() {
-            return this.$store.state.tasks.taskLists
+            return this.$store.state.tasks.taskLists || []
         },
         allTasks() {
             return this.$store.getters.allTasks
