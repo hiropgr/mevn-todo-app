@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import { mdiEye, mdiEyeOff } from '@mdi/js'
 export default {
     created () {
         if(this.isUserLoggedIn) {
