@@ -65,7 +65,7 @@
                                 </v-col>
                                 <v-col cols="2">
                                     <v-btn text icon color="grey" @click="passVis = ! passVis">
-                                        <v-icon>{{ !passVis ? 'visibility' : 'visibility_off' }}</v-icon>
+                                        <v-icon>{{ !passVis ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { mdiEye, mdiEyeOff } from '@mdi/js'
 export default {
     created () {
         if(this.isUserLoggedIn) {

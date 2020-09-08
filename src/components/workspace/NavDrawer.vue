@@ -109,7 +109,7 @@
                         </v-list-item-title>
                         <v-list-item-action>
                             <v-btn icon color="grey" @click.stop="editTaskList(taskList)">
-                                <v-icon>settings</v-icon>
+                                <v-icon>mdi-cog</v-icon>
                             </v-btn>
                         </v-list-item-action>
                     </v-list-item>
