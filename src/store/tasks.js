@@ -101,12 +101,12 @@ export default {
     },
     async deleteTask({commit, rootState}, task) {
       try {
-        commit('deleteTask', task)
         await fetchPlus('task', 'delete', JSON.stringify({ 
           taskId: task._id, 
           taskListId: task.list._id,
           token: rootState.user.token
         }))
+        commit('deleteTask', task)
       } catch (error) {
         commit('setAlert', error.message)
         throw error
@@ -115,7 +115,7 @@ export default {
     },
     async updateTask({commit, rootState}, { taskListId, updateObj }) {
       try {
-        fetchPlus('task', 'put', JSON.stringify({ 
+        await fetchPlus('task', 'put', JSON.stringify({ 
           task: updateObj, 
           taskListId,
           token: rootState.user.token
@@ -160,13 +160,13 @@ export default {
     },
     async updateTaskList({commit, rootState}, {taskList, set}) {
       try {
-        commit('updateTaskList', {taskList, set})
         const updateObj = {...taskList}
         delete updateObj.items
         await fetchPlus('task-list', 'put', JSON.stringify({
           token: rootState.user.token,
           taskList: updateObj
         }))
+        commit('updateTaskList', {taskList, set})
       } catch (error) {
         commit('setAlert', error.message)
         throw error
@@ -174,11 +174,11 @@ export default {
     },
     async deleteTaskList({commit, rootState}, taskListId) {
       try {
-        commit('deleteTaskList', taskListId)
         await fetchPlus('task-list', 'delete', JSON.stringify({
           token: rootState.user.token,
           taskListId
         }))
+        commit('deleteTaskList', taskListId)
       } catch (error) {
         commit('setAlert', error.message)
         throw error
