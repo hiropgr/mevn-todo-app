@@ -1,5 +1,5 @@
 export default async function(apiLink, method, body) {
-    const response = await fetch('http://localhost:3000/api/' + apiLink, {
+    const response = await fetch('api/' + apiLink, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body,
