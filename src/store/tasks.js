@@ -179,7 +179,7 @@ export default {
           taskListId
         }))
         commit('deleteTaskList', taskListId)
-        if(state.activeList && activeList._id == taskListId)
+        if(state.activeList && state.activeList._id == taskListId)
           commit('setTaskList', null)
       } catch (error) {
         commit('setAlert', error.message)
