@@ -12,6 +12,8 @@
             <v-card-text>
                 <v-text-field
                     v-model="text"
+                    @keypress.enter="addTask"
+                    :disabled="loading"
                     single-line
                     label="I want to..."
                 ></v-text-field>

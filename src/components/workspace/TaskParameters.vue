@@ -24,7 +24,13 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-col>
-                            <v-btn color="error" text class="font-weight-bold" block @click="deleteTask">Delete</v-btn>
+                            <v-btn 
+                                color="error" 
+                                text class="font-weight-bold" 
+                                block 
+                                @click="deleteTask"
+                                :loading="deleteLoading"
+                            >Delete</v-btn>
                         </v-col>
                         <v-col>
                             <v-btn 
@@ -32,6 +38,7 @@
                                 color="primary" 
                                 text 
                                 block
+                                :disabled="deleteLoading"
                                 class="font-weight-bold" 
                                 @click="restoreTask"
                             >Mark as done</v-btn>
@@ -40,6 +47,7 @@
                                 color="black" 
                                 text 
                                 block
+                                :disabled="deleteLoading"
                                 class="font-weight-bold" 
                                 @click="restoreTask"
                             >Restore</v-btn>
@@ -59,6 +67,7 @@ export default {
     data () {
         return {
             textfieldFocused: false,
+            deleteLoading: false
         }
     },
     computed: {
@@ -83,8 +92,13 @@ export default {
         }
     },
     methods: {
-        deleteTask() {
-            this.$store.dispatch('deleteTask', this.task)
+        async deleteTask() {
+            try {
+                this.deleteLoading = true
+                await this.$store.dispatch('deleteTask', this.task)
+            } finally {
+                this.deleteLoading = false                
+            }
         },
         restoreTask() {
             this.$store.dispatch('toggleTaskStatus', this.task)
