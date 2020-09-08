@@ -26,12 +26,12 @@ export default {
       font-family: Nunito, sans-serif !important
 
     .background-1
-      background: url(../public/images/background-1.jpg)
+      background: url(../public/img/background-1.jpg)
       background-size: cover
     .background-2
-      background: url(../public/images/background-2.jpg)
+      background: url(../public/img/background-2.jpg)
       background-size: cover
     .background-3
-      background: url(../public/images/background-3.jpg)
+      background: url(../public/img/background-3.jpg)
       background-size: cover
 </style>
