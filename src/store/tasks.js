@@ -172,13 +172,15 @@ export default {
         throw error
       }
     },
-    async deleteTaskList({commit, rootState}, taskListId) {
+    async deleteTaskList({state, commit, rootState}, taskListId) {
       try {
         await fetchPlus('task-list', 'delete', JSON.stringify({
           token: rootState.user.token,
           taskListId
         }))
         commit('deleteTaskList', taskListId)
+        if(state.activeList && activeList._id == taskListId)
+          commit('setTaskList', null)
       } catch (error) {
         commit('setAlert', error.message)
         throw error
