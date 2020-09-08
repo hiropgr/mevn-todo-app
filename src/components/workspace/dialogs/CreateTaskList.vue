@@ -11,7 +11,7 @@
             <v-card-text>
                 <v-text-field
                     v-model="name"
-                    @keypress="createTaskList"
+                    @keypress.enter="createTaskList"
                     :disabled="loading"
                     :rules="[v => !!v || `List name can't be empty`]"
                     label="List name"
